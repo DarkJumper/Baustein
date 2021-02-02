@@ -1,5 +1,3 @@
-import sys
-
 from help_dec import *
 
 data1 = "[MSR:RECORD];1;G11000;BST_LIB_MSR;M_ANA;B-2;Hub P-10;;256;1;;;;2"

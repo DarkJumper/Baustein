@@ -1,13 +1,14 @@
+import sys
 import functools
 import time
 
 
 def runtime_check(repeats):
     """
-    runtime_check [Eine funktion mehrmals ausführen lassen]
+    runtime_check Eine funktion mehrmals ausführen lassen
 
     Args:
-        repeats ([int]): [Anzahl der gewünschten wiederholungen]
+        repeats (int): Anzahl der gewünschten wiederholungen
     """
 
     def decorater_runtime_check(func):
@@ -26,13 +27,13 @@ def runtime_check(repeats):
 
 def debug(func):
     """
-    debug [Unterstützung beim debugen. Es wird funktions name Ausgegeben und Return wert der Aufgerufenen Funktion]
+    debug Decorater Unterstützung beim debugen. Es wird funktions name Ausgegeben und Return wert der Aufgerufenen Funktion
 
     Args:
-        func ([funktion]): [Name der Ausgeführten Funktion]
+        func (funktion): Name der Ausgeführten Funktion
 
     Returns:
-        [None]: [Rückgabe wert der Aufgerufenen Funktion]
+        None: Rückgabe wert der Aufgerufenen Funktion
     """
 
     @functools.wraps(func)
@@ -40,7 +41,7 @@ def debug(func):
         args_repr = [repr(a) for a in args]
         kwargs_repr = [f"{k}={v!r}" for k, v in kwargs.items()]
         signature = ", ".join(args_repr + kwargs_repr)
-        print(f"Aufruf von: {func.__name__}({signature})")
+        print(f"Python Version {sys.version.split(' ')[0]}\nAufruf von: {func.__name__}({signature})")
         value = func(*args, **kwargs)
         print(f"{func.__name__!r} returned: {value!r}")
         return value
@@ -50,13 +51,13 @@ def debug(func):
 
 def timer(func):
     """
-    timer [Ausgabe der Runtime Dauer]
+    timer Ausgabe der Runtime Dauer
 
     Args:
-        func ([Funktion]): [Name der Ausgeführten Funktion]
+        func (Funktion): Name der Ausgeführten Funktion
 
     Returns:
-        [None]: [Rückgabe wert der Aufgerufenen Funktion]
+        None: Rückgabe wert der Aufgerufenen Funktion
     """
 
     @functools.wraps(func)
