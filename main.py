@@ -1,5 +1,5 @@
-from Baustein import ParaData
 from help_dec import *
+from Baustein import ParaData
 
 data1 = "[MSR:RECORD];1;G11000;BST_LIB_MSR;M_ANA;B-2;Hub P-10;;256;1;;;;2"
 data2 = "[UID:ACCMSR];6;ADMIN;3;GUEST;1;NORMALER USER;3;BETRIEB;1;LYSE;1;SALZ;1"

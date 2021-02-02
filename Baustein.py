@@ -3,8 +3,8 @@ from typing import List
 
 class ParaData:
     """
-     Zerlegen der eingegebenen Daten in ihre einzelteile.
-     Es wird immer in 4 paare zerteilt.
+    Zerlegen der eingegebenen Daten in ihre einzelteile.
+    Es wird immer in 4 paare zerteilt.
     """
 
     def __init__(self) -> None:
@@ -55,7 +55,10 @@ class ParaData:
         Returns:
             read_out (dict): Setter wird zurück gegeben.
         """
-        para_data = tuple(new_para_data)
+        if new_para_data == None:
+            return self.read_out
+        else:
+            para_data = tuple(new_para_data)
         for count, element in enumerate(para_data, start=0):
             if count % 5 == 0:
                 self.read_out.update({element: para_data[count:count + 5]})
