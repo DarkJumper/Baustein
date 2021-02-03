@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 
 
 class ParaData:
@@ -11,7 +11,7 @@ class ParaData:
         self.read_out = dict()
 
     @property
-    def Sections(self):
+    def Sections(self) -> Dict[str, tuple]:
         """
         Sections Die daten aus read_out wird Ausgegeben.
 
@@ -21,7 +21,7 @@ class ParaData:
         return self._get_Sections()
 
     @Sections.setter
-    def Sections(self, new_para_data):
+    def Sections(self, new_para_data: List[str]) -> Dict[str, tuple]:
         """
         Sections Eine setter funktion zum einlesen der dateien ins dict read_out
 
@@ -34,7 +34,7 @@ class ParaData:
         return self._set_Sections(new_para_data)
 
     @Sections.deleter
-    def Sections(self):
+    def Sections(self) -> Dict[str, tuple]:
         """
         Sections Es wird der read_out gecleart.
 
@@ -43,7 +43,7 @@ class ParaData:
         """
         return self._clean_Sections()
 
-    def _set_Sections(self, new_para_data):
+    def _set_Sections(self, new_para_data: List[str]) -> Dict[str, tuple]:
         """
         _set_Sections Die Liste wird in einzelnen Teile zerleft dies sind immer 4 lang.
 
@@ -55,16 +55,16 @@ class ParaData:
         Returns:
             read_out (dict): Setter wird zurück gegeben.
         """
-        if new_para_data == None:
+        if new_para_data is None:
             return self.read_out
         else:
             para_data = tuple(new_para_data)
         for count, element in enumerate(para_data, start=0):
             if count % 5 == 0:
-                self.read_out.update({element: para_data[count:count + 5]})
+                self.read_out[element] = para_data[count:count + 5]
         return self.read_out
 
-    def _get_Sections(self):
+    def _get_Sections(self) -> Dict[str, tuple]:
         """
         _get_Sections Eine getter funktion für die rückgabe der daten.
 
@@ -73,7 +73,7 @@ class ParaData:
         """
         return self.read_out
 
-    def _clean_Sections(self):
+    def _clean_Sections(self) -> Dict[str, tuple]:
         """
         _clean_Sections Das dict wird bereinigt.
 
