@@ -25,7 +25,7 @@ class MsrData:
         Returns:
             _get_Sections (dict): Es wird das keywort mit den dazu gehörigen 4 angaben zurückgegeben.
         """
-        return self._get_Sections()
+        return self._get_Parameter()
 
     @Parameter.setter
     def Parameter(self, new_para_data: List[str]) -> None:
@@ -39,18 +39,18 @@ class MsrData:
             self.status = -1
         else:
             new_para_data_copy = new_para_data.copy()
-            self._set_Sections(new_para_data_copy)
+            self._set_Parameter(new_para_data_copy)
 
     @Parameter.deleter
     def Parameter(self) -> None:
         """
         Sections Es wird der read_out gecleart.
         """
-        self._clean_Sections()
+        self._clean_Parameter()
 
-    def _set_Sections(self, new_para_data: List[str]) -> None:
+    def _set_Parameter(self, new_para_data: List[str]) -> None:
         """
-        _set_Sections Die Liste wird in einzelnen Teile zerleft dies sind immer 4 lang.
+        _set_Parameter Die Liste wird in einzelnen Teile zerleft dies sind immer 4 lang.
 
         Args:
             new_para_data (list): para data wird eingegeben dies wird direkt in der funktion Kopiert.
@@ -67,18 +67,18 @@ class MsrData:
             self.status = -2
         print(f'{__class__.__name__}: wurde mit Exit Code {self.status} Ausgeführt!')
 
-    def _get_Sections(self) -> Dict[str, tuple]:
+    def _get_Parameter(self) -> Dict[str, tuple]:
         """
-        _get_Sections Eine getter funktion für die rückgabe der daten.
+        _get_Parameter Eine getter funktion für die rückgabe der daten.
 
         Returns:
             read_out (dict): Ausgabe dict wird ein klassen dict returned dieses kann nur über die setter methode geändert werden.
         """
         return self.para_analyse
 
-    def _clean_Sections(self) -> None:
+    def _clean_Parameter(self) -> None:
         """
-        _clean_Sections Das dict wird bereinigt.
+        _clean_Parameter Das dict wird bereinigt.
         """
         self.para_analyse.clear()
         self.status = 0
