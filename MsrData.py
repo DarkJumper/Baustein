@@ -2,7 +2,7 @@ from typing import List, Dict
 from help_dec import *
 
 
-class ParaData:
+class MsrData:
     """
     Zerlegen der Para-Data Daten in ihre einzelteile.
     Status ->-2: Daten Abschnitte passen nicht überein. -1: Enthält keine Daten 1: Erfolgreich Bearbeitet.  0:Wurde noch nicht Bearbeitet  
@@ -13,10 +13,12 @@ class ParaData:
         __init__ Initalisieren der leeren Daten Dicts.
         """
         self.para_analyse = dict()
+        self.msr_acc = dict()
+        self.msr_rec = dict()
         self.status = 0
 
     @property
-    def Sections(self) -> Dict[str, tuple]:
+    def Parameter(self) -> Dict[str, tuple]:
         """
         Sections Die daten aus read_out wird Ausgegeben.
 
@@ -25,19 +27,22 @@ class ParaData:
         """
         return self._get_Sections()
 
-    @Sections.setter
-    def Sections(self, new_para_data: List[str]) -> None:
+    @Parameter.setter
+    def Parameter(self, new_para_data: List[str]) -> None:
         """
         Sections Eine setter funktion zum einlesen der dateien ins dict read_out
 
         Args:
             new_para_data (list): Para_data wird eingegeben dies wird direkt in der funktion copiert.
         """
-        new_para_data_copy = new_para_data.copy()
-        self._set_Sections(new_para_data_copy)
+        if new_para_data is None:
+            self.status = -1
+        else:
+            new_para_data_copy = new_para_data.copy()
+            self._set_Sections(new_para_data_copy)
 
-    @Sections.deleter
-    def Sections(self) -> None:
+    @Parameter.deleter
+    def Parameter(self) -> None:
         """
         Sections Es wird der read_out gecleart.
         """
@@ -52,9 +57,7 @@ class ParaData:
             Startpunkt der Liste muss von außen vorgegeben werden. 
             Es sollte am besten eine Kopie übergeben werden.
         """
-        if new_para_data is None:
-            self.status = -1
-        elif int(new_para_data[1]) == len(new_para_data[2::5]):
+        if int(new_para_data[1]) == len(new_para_data[2::5]):
             para_data = tuple(new_para_data[2:])
             for count, element in enumerate(para_data, start=0):
                 if count % 5 == 0:
@@ -80,20 +83,6 @@ class ParaData:
         self.para_analyse.clear()
         self.status = 0
 
-
-class AccMsr:
-    """
-    Zerlegen der Msr-Access Daten aus der Liste.
-    Status ->-2: Daten Abschnitte passen nicht überein. -1: Enthält keine Daten 1: Erfolgreich Bearbeitet.  0:Wurde noch nicht Bearbeitet
-    """
-
-    def __init__(self) -> None:
-        """
-        __init__ Initalisieren des leeren Daten Dicts
-        """
-        self.status = 0
-        self.msr_acc = dict()
-
     @property
     def Access(self) -> Dict[str, int]:
         """
@@ -112,8 +101,11 @@ class AccMsr:
         Args:
             new_acc_msr (List[str]): liste von ACCMSR muss übergeben werden.
         """
-        new_acc_msr_copy = new_acc_msr.copy()
-        self._set_Access(new_acc_msr_copy)
+        if new_acc_msr is None:
+            self.status = -1
+        else:
+            new_acc_msr_copy = new_acc_msr.copy()
+            self._set_Access(new_acc_msr_copy)
 
     @Access.deleter
     def Access(self) -> None:
@@ -138,9 +130,7 @@ class AccMsr:
         Args:
             new_acc_msr (List[str]): liste von ACCMSR muss übergeben werden.
         """
-        if new_acc_msr is None:
-            self.status = -1
-        elif int(new_acc_msr[1]) == len(new_acc_msr[2::2]):
+        if int(new_acc_msr[1]) == len(new_acc_msr[2::2]):
             acc_msr = tuple(new_acc_msr[2:])
             for count, element in enumerate(acc_msr, start=0):
                 if count % 2 == 0:
@@ -156,20 +146,6 @@ class AccMsr:
         """
         self.msr_acc.clear()
         self.status = 0
-
-
-class MsrRecord:
-    """
-     Zerlegen der MSR-Record Daten. Aus einer Liste.
-     Status ->-1: Enthält keine Daten 1: Erfolgreich Bearbeitet.  0:Wurde noch nicht Bearbeitet
-    """
-
-    def __init__(self) -> None:
-        """
-        __init__ Initalisieren des leeren Daten Dicts und des Statuses.
-        """
-        self.status = 0
-        self.msr_rec = dict()
 
     @property
     def Record(self) -> Dict[str, str]:
@@ -189,8 +165,11 @@ class MsrRecord:
         Args:
             new_msr_rec ([List]): Es wird eine Liste mit Strings erwartet. Diese wird direkt kopiert. Hier sollte nur eine Liste übergeben werden von MSR:RECORD
         """
-        new_msr_rec_copy = new_msr_rec.copy()
-        self._set_Record(new_msr_rec_copy)
+        if new_msr_rec is None:
+            self.status = -1
+        else:
+            new_msr_rec_copy = new_msr_rec.copy()
+            self._set_Record(new_msr_rec_copy)
 
     @Record.deleter
     def Record(self) -> None:
@@ -222,9 +201,7 @@ class MsrRecord:
         Args:
             new_msr_rec ([List]): Es wird eine Liste mit Strings erwartet.  Hier sollte nur eine Liste übergeben werden von MSR:RECORD
         """
-        if new_msr_rec is None:
-            self.status = -1
-        else:
+        if int(new_msr_rec[1]) == 1:
             rec_msr = tuple(new_msr_rec[2:])
             self.msr_rec["MN"] = rec_msr[0]
             self.msr_rec["LB"] = rec_msr[1]
@@ -234,6 +211,8 @@ class MsrRecord:
             self.msr_rec["AB"] = rec_msr[6]
             self.msr_rec["ST"] = rec_msr[7]
             self.status = 1
+        else:
+            self.status = -2
         print(f'{__class__.__name__}: wurde mit Exit Code {self.status} Ausgeführt!')
 
     def _clean_Record(self) -> None:
