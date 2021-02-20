@@ -30,7 +30,7 @@ def test_para_data_wrong_input():
     """
     test_para = MsrData()
     test_para.Parameter = ['ParaData', '1', 'test', '1', '2', '3', '4', 'test1', '10', '11', '12', '13']
-    assert test_para.Parameter == {} and test_para.Status == -2
+    assert test_para.Parameter == {} and test_para.Status == -3
 
 
 def test_access():
@@ -102,7 +102,7 @@ def test_record_wrong_input():
 def test_projekt():
     test_str = "[BEGIN_PROJECTHEADER];TEST;Test;Ich AG;;0;0;2011;9;27;8;34;1;926;Peter Schwarz;;;1;1;1;2001;1;30;14;47;31;687;1;14;12;35;54;690;2016;1;690;0;0;0;0;0;0;3444;965;0;0;0;1"
     test_proj = FreelanceBase()
-    test_proj.Projekt = test_str.split(";")
+    test_proj.Projekt = test_str
     assert test_proj.Projekt == {
         'Name': 'TEST',
         'Komi': 'Test',
@@ -148,8 +148,7 @@ def test_area():
         "[AREA];1;N;6;Area N", "[AREA];1;O;6;Area O", "[NOAREA];0"
         ]
     test_area = FreelanceBase()
-    for element in test_list[1:-1]:
-        test_area.Area = element.split(";")
+    test_area.Area = test_list
     assert test_area.Area == {
         65536: ('!', 'Systembereich'),
         32768: ('-', 'Kein Bereich'),
@@ -169,6 +168,62 @@ def test_area():
         2: ('N', 'Area N'),
         1: ('O', 'Area O')
         } and test_area.Status == 1
+
+
+def test_area_wronge_len():
+    test_list = [
+        "[BEGIN_AREADEFINITION];17", "[AREA];1;!;13;Systembereich", "[AREA];1;-;12;Kein Bereich", "[AREA];1;A;6;Area A",
+        "[AREA];1;B;6;Area B", "[AREA];1;C;6;Area C", "[AREA];1;D;6;Area D", "[AREA];1;E;6;Area E",
+        "[AREA];1;F;6;Area F", "[AREA];1;G;6;Area G", "[AREA];1;H;6;Area H", "[AREA];1;I;6;Area I",
+        "[AREA];1;J;6;Area J", "[AREA];1;K;6;Area K", "[AREA];1;L;6;Area L", "[AREA];1;M;6;Area M",
+        "[AREA];1;N;6;Area N", "[AREA];1;O;7;Area O", "[NOAREA];0"
+        ]
+    test_area = FreelanceBase()
+    test_area.Area = test_list
+    assert test_area.Area == {
+        65536: ('!', 'Systembereich'),
+        32768: ('-', 'Kein Bereich'),
+        16384: ('A', 'Area A'),
+        8192: ('B', 'Area B'),
+        4096: ('C', 'Area C'),
+        2048: ('D', 'Area D'),
+        1024: ('E', 'Area E'),
+        512: ('F', 'Area F'),
+        256: ('G', 'Area G'),
+        128: ('H', 'Area H'),
+        64: ('I', 'Area I'),
+        32: ('J', 'Area J'),
+        16: ('K', 'Area K'),
+        8: ('L', 'Area L'),
+        4: ('M', 'Area M'),
+        2: ('N', 'Area N'),
+        } and test_area.Status == -2
+
+
+def test_area_wronge_list_len():
+    test_list = [
+        "[BEGIN_AREADEFINITION];17", "[AREA];1;!;13;Systembereich", "[AREA];1;-;12;Kein Bereich", "[AREA];1;A;6;Area A",
+        "[AREA];1;B;6;Area B", "[AREA];1;C;6;Area C", "[AREA];1;D;6;Area D", "[AREA];1;E;6;Area E",
+        "[AREA];1;F;6;Area F", "[AREA];1;G;6;Area G", "[AREA];1;H;6;Area H", "[AREA];1;I;6;Area I",
+        "[AREA];1;J;6;Area J", "[AREA];1;K;6;Area K", "[AREA];1;L;6;Area L", "[AREA];1;M;6;Area M",
+        "[AREA];1;N;6;Area N", "[NOAREA];0"
+        ]
+    test_area = FreelanceBase()
+    test_area.Area = test_list
+    assert test_area.Area == {} and test_area.Status == -3
+
+
+def test_area_value_error():
+    test_list = [
+        "[BEGIN_AREADEFINITION];17", "[AREA];1;!;13;Systembereich", "[AREA];1;-;12;Kein Bereich", "[AREA];1;A;6;Area A",
+        "[AREA];1;B;6;Area B", "[AREA];1;C;6;Area C", "[AREA];1;D;6;Area D", "[AREA];1;E;6;Area E",
+        "[AREA];1;F;6;Area F", "[AREA];1;G;6;Area G", "[AREA];1;H;6;Area H", "[AREA];1;I;6;Area I",
+        "[AREA];1;J;6;Area J", "[AREA];1;K;6;Area K", "[AREA];1;L;6;Area L", "[AREA];1;M;6;Area M",
+        "[AREA];1;N;6;Area N", "[AREA];1;O;A;Area O", "[NOAREA];0"
+        ]
+    test_area = FreelanceBase()
+    test_area.Area = test_list
+    assert test_area.Area == {} and test_area.Status == -4
 
 
 # Area class muss noch geändert werden!!!
